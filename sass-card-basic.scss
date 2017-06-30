@@ -1,0 +1,351 @@
+/*------------------------------------*\
+  CARD-BASIC
+\*------------------------------------*/
+
+/**
+ * This is the styling for cards
+ *
+ *
+ * @block card-basic
+ */
+.card-basic {
+  /* Display and box model */
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+  position: relative;
+  padding-left: to-rem(12px);
+
+  /* Appearance */
+  color: $gray;
+  border: solid 1px $lighter-slate;
+  border-radius: $global-rounded;
+  box-shadow: 0 1px 2px rgba($black,.25);
+  transition: transform .3s;
+
+  /**
+   * The currently selected item.
+   *
+   * @modifier selected
+   */
+  &--selected {
+    /* Appearance */
+    border: solid 2px $bequick-blue;
+  }
+
+  /**
+   * Style for cards w/ no status.
+   * Ex. Used for Settings cards.
+   *
+   * @modifier no-status
+   */
+  &--no-status {
+    /* Display and box model */
+    padding-left: 0;
+  }
+
+  /**
+   * Style for the action card.
+   * Ex. Used for Add Card.
+   *
+   * @modifier action
+   */
+  &--action {
+    /* Display and box model */
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+
+    /* Appearance */
+    @include font-regular;
+    min-height: to-rem(179px);
+    padding: $default-space-sm;
+    text-transform: uppercase;
+    text-align: center;
+    color: $lighter-slate;
+    border: dashed 2px $lighter-slate;
+    box-shadow: none;
+  }
+
+  /**
+   * Layout and style for the header within a card.
+   * Primarily used w/ <header> tag.
+   *
+   * @element header
+   */
+  &__header {
+    /* Display and box model */
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    padding: $default-space-sm;
+
+    /* Appearance */
+    border-bottom: solid 1px $lighter-slate;
+
+    /**
+     * Removes bottom border
+     * Used when a card had no content area
+     * Ex. Address cards
+     *
+     * @modifier no-border
+     * @for header
+     */
+    &--no-border {
+      /* Appearance */
+      border-bottom: none;
+    }
+
+    /**
+     * INTERIM FIX - Adds margin to bottom
+     * Wont be necessary when cards are refactored
+     * Ex. Line cards on Sub Overview
+     *
+     * @modifier space-bottom
+     * @for header
+     */
+    &--no-space {
+      /* Display and box model */
+      margin-bottom: $default-space-sm;
+      padding: $default-space-med 0;
+    }
+  }
+
+  /**
+   * Layout and style for titles within a card.
+   & Primarily used in the header.
+   *
+   * @element title
+   */
+  &__title {
+    /* Display and box model */
+    flex: 1;
+    padding-right: .5em;
+
+    /* Appearance */
+    @include font-semibold;
+    font-size: to-rem(15px);
+    line-height: 1.4em;
+    word-break: break-word;
+  }
+
+  /**
+   * Layout for the content area of a card.
+   *
+   * @element content
+   */
+  &__content {
+    /* Display and box model */
+    padding: $default-space-med $default-space-sm;
+  }
+
+  /**
+   * Styles descriptive copy in cards.
+   * Used in Settings Cards
+   *
+   * @element description
+   */
+  &__description {
+    /* Appearance */
+    font-size: $font-xsm;
+    line-height: 1.4em;
+  }
+
+  /**
+   * Layout and style for listed items in the content element.
+   * Primarily used w/ <ul> tag for listing groups
+   * labels and values.
+   *
+   * @element list
+   */
+  &__list {
+    /* Appearance */
+    font-size: $font-sm;
+  }
+
+  /**
+   * Layout styles for list items.
+   *
+   * @element list-item
+   */
+  &__list-item {
+    display: flex;
+    flex-flex: row wrap;
+    align-items: baseline;
+  }
+
+  /**
+   * Styling for labels
+   *
+   * @element label
+   */
+  &__label {
+    @include label;
+    margin-right: 1em;
+
+    /**
+     * Makes font-size large
+     *
+     * @modifier large
+     * @property size
+     * @for label
+     */
+    &--size--large {
+      /* Appearance */
+      @include font-semibold;
+      font-size: $font-sm;
+    }
+  }
+
+  /**
+   * Styling for values
+   *
+   * @element value
+   */
+  &__value {
+    /* Appearance */
+    @include font-regular;
+    font-size: $font-sm;
+    word-break: break-word;
+
+    /**
+     * Styling for error values
+     * Ex. Used on payments section to
+     * show card alerts.
+     *
+     * @modifier error
+     * @for value
+     */
+    &--error {
+      /* Appearance */
+      color: $red;
+      text-transform: uppercase;
+    }
+  }
+
+  /**
+   * Styling for icons
+   *
+   * @element icon
+   */
+  &__icon {
+    /**
+     * Makes font-size larger
+     *
+     * @modifier add
+     * @property icon
+     * @for icon
+     */
+    &--icon--add {
+      &:before {
+        /* Appearance */
+        @include font-icon;
+        content: '\62';
+        font-size: $font-med;
+      }
+    }
+  }
+
+  /**
+   * Layout and style for the footers within a card.
+   * Primarily used w/ <footer> tag.
+   *
+   * @element footer
+   */
+  &__footer {
+    /* Display and box model */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex:1;
+    text-align: center;
+  }
+
+  /**
+   * Layout and style for the action elements within a footer.
+   *
+   * @element action
+   */
+  &__action {
+    /* Display and box model */
+    flex:1;
+    justify-content: center;
+    text-align: center;
+    padding: $default-space-sm 0;
+    border-left: solid 1px $lighter-slate;
+
+    /* Appearance */
+    border-top: solid 1px $lighter-slate;
+
+    &:first-child {
+      /* Appearance */
+      border-left: none;
+    }
+
+    /**
+     * Changes text color to green
+     *
+     * @modifier green
+     * @property color
+     * @for action
+     */
+    &--green {
+      /* Appearance */
+      color: $green;
+    }
+  }
+
+  /**
+   * Media query for min-width 641px, medium screens
+   */
+  @media #{$medium-up} {
+    /**
+     * Layout and style for titles within a card.
+     & Primarily used in the header.
+     *
+     * @element title
+     */
+    &__title {
+      /* Display and box model */
+      font-size: to-rem(16px);
+    }
+  }
+
+
+  /**
+   * Media query for min-width 1041px, large screens up
+   */
+  @media #{$large-up} {
+    /* Controls hover state of the block element */
+    &:hover {
+      transform: scale(1.025);
+      box-shadow: 0 2px 3px rgba($black,.25);
+    }
+
+    /**
+     * Layout and style for the add card.
+     *
+     * @modifier add
+     */
+    &--action {
+      /* Controls hover state of the add card element */
+      &:hover {
+        color: $bequick-blue;
+        border-color: currentColor;
+        box-shadow: none;
+      }
+    }
+
+    /**
+     * Layout and style for the action elements within a footer.
+     *
+     * @element action
+     */
+    &__action {
+      /* Controls hover state of the action element */
+      &:hover {
+        background:$light-blue;
+      }
+    }
+  }
+}

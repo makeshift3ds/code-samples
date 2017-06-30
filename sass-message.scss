@@ -1,0 +1,594 @@
+/*------------------------------------*\
+    MESSAGE
+\*------------------------------------*/
+
+/**
+ * Set of styles to positon and style messages through-out the system.
+ *
+ *
+ * @block message
+ */
+.message {
+  /* Display and box model */
+  padding: $default-space-med;
+  padding-bottom: $default-space-sm;
+
+  /**
+   * Adds space to the top
+   *
+   * @modifier pad-top
+   */
+  &--pad-top {
+    /* Display and box model */
+    margin-top: to-rem(15px);
+  }
+
+  /**
+   * Remvoes space from top
+   * Ex. Used to remove space on error messages
+   *
+   * @modifier no-pad-top
+   */
+  &--no-pad-top {
+    /* Display and box model */
+    padding-top: 0;
+  }
+
+  /**
+   * Adds header style
+   *
+   * @element header
+   */
+  &__header {
+    /* Display and box model */
+    margin-bottom: $default-space-xsm; /* 10px */
+  }
+
+  /**
+   * Used to position and display Action Items
+   * such as buttons and links
+   *
+   * @element action
+   */
+  &__action {
+    /* Display and box model */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: to-rem(20px);
+  }
+
+  /**
+   * Blocks out groups of elements
+   * Used to give helpful high-level info within message.
+   *
+   *
+   * @element list
+   */
+  &__list {
+    /* Display and box model */
+    padding-bottom: to-rem(20px);
+
+    /* Appearance */
+    border-bottom: solid 1px $lighter-slate;
+
+    /**
+     * Removes the border-bottom
+     *
+     * @modifier no-border
+     * @for list
+     */
+    &--no-border {
+      /* Display and box model */
+      padding-bottom: 0;
+
+      /* Appearance */
+      border-bottom: 0;
+    }
+
+    /**
+     * Removes the border-bottom
+     *
+     * @modifier no-border
+     * @for list
+     */
+    &--border-top {
+      /* Display and box model */
+      padding-top: $default-space-xsm;
+      padding-bottom: 0;
+
+      /* Appearance */
+      border-top: solid 1px $lighter-slate;
+      border-bottom: 0;
+    }
+
+    /**
+     * Adds space to the top
+     *
+     * @modifier pad-top
+     * @for list
+     */
+    &--pad-top {
+      margin-top: to-rem(20px);
+    }
+
+    /**
+     * Adds space to the bottom
+     *
+     * @modifier pad-bottom
+     * @for list
+     */
+    &--pad-bottom {
+      margin-bottom: to-rem(20px);
+    }
+  }
+
+  /**
+   * Blocks out groups of elements
+   *
+   *
+   * @element list-item
+   */
+  &__list-item {
+    /* Display and box model */
+    display: flex;
+    align-items: baseline;
+
+    /* Appearance */
+    line-height: 1em;
+
+    /**
+     * Vertically centers the key-item elements.
+     *
+     * @modifier middle
+     * @property position
+     * @for list-item
+     */
+    &--position--middle {
+      /* Display and box model */
+      align-items: center;
+    }
+
+    /**
+     * Adds space to list-item.
+     *
+     * @modifier pad-bottom
+     * @for list-item
+     */
+    &--pad-bottom {
+      /* Display and box model */
+      margin-bottom: to-rem(15px);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  /**
+   * Styles labels in Messages
+   * Primarily used alongside values.
+   * Ex. Used in message__key element
+   * within the Device Activation Guide
+   *
+   *
+   * @element label
+   */
+  &__label {
+    @include label;
+
+    /* Display and box model */
+    flex: 1;
+  }
+
+  /**
+   * Styles values in Messages
+   * Primarily used alongside labels.
+   * Ex. Used in message__key element
+   * within the Device Activation Guide
+   *
+   *
+   * @element value
+   */
+  &__value {
+
+    /* Display and box model */
+    flex: 1;
+
+    /* Appearance */
+    font-size: $font-xsm;
+
+    /**
+     * Aligns the value text right
+     *
+     * @modifier right
+     * @property position
+     * @for value
+     */
+    &--position--right {
+      /* Appearance */
+      text-align: right;
+    }
+
+    /**
+     * Makes the value text larger
+     *
+     * @modifier large
+     * @property text
+     * @for value
+     */
+    &--text--large {
+      /* Appearance */
+      font-size: $font-sm;
+    }
+
+    /**
+     * Makes the value text bold
+     *
+     * @modifier bold
+     * @property style
+     * @for value
+     */
+    &--style--bold {
+      /* Appearance */
+      @include font-semibold;
+    }
+  }
+
+  /**
+   * Wraps element(s) and adds space below them.
+   *
+   *
+   * @element block
+   */
+  &__block {
+    margin-bottom:  to-rem(30px);
+  }
+
+
+  /**
+   * Styles Titles in a message.
+   *
+   *
+   * @element title
+   */
+  &__title {
+    @include font-bold;
+
+    /* Display and box model */
+    margin-bottom: to-rem(5px);
+
+    /* Appearance */
+    text-transform: uppercase;
+    line-height: 1.2em;
+
+    /**
+     * Makes text larger.
+     *
+     * @modifier large
+     * @property text
+     * @for title
+     */
+    &--text--large {
+      /* Appearance */
+      font-size: to-rem(23px);
+    }
+
+    /**
+     * Centers the text.
+     *
+     * @modifier center
+     * @property text
+     * @for title
+     */
+    &--text--center {
+      /* Appearance */
+      text-align: center;
+    }
+
+    /**
+     * Makes title text green
+     *
+     * @modifier green
+     * @property color
+     * @for title
+     */
+    &--color--green {
+      /* Appearance */
+      color: $green;
+    }
+
+    /**
+     * Makes title text red
+     *
+     * @modifier red
+     * @property color
+     * @for title
+     */
+    &--color--red {
+      /* Appearance */
+      color: $red;
+    }
+
+    /**
+     * Adds space to top.
+     *
+     * @modifier pad-top
+     * @for title
+     */
+    &--pad-top {
+      /* Display and box model */
+      margin-top: to-rem(15px);
+    }
+  }
+
+  /**
+   * Used to display a row of icons
+   * Ex. Carrier Coverage results.
+   *
+   * @element icon-group
+   */
+  &__icon-group {
+    /* Display and box model */
+    display: flex;
+    justify-content: center;
+    margin-top: to-rem(20px);
+  }
+
+  /**
+   * Used to position and display icons witin
+   * a message.
+   *
+   * @element icon
+   */
+  &__icon {
+    /* Display and box model */
+    display: flex;
+    justify-content: center;
+    padding-top: to-rem(15px);
+    padding-bottom: to-rem(30px);
+    margin-right: .35em;
+
+    /* Appearance */
+    font-size: to-rem(45px);
+
+    &:last-child {
+      /* Display and box model */
+      margin-right: 0;
+    }
+
+    &:before {
+      @include font-icon;
+      font-weight: normal;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /**
+     * Colors icon green.
+     *
+     * @modifier green
+     * @property color
+     * @for icon
+     */
+    &--color--green {
+      /* Appearance */
+      color: $green;
+    }
+
+    /**
+     * Colors icon red.
+     *
+     * @modifier red
+     * @property color
+     * @for icon
+     */
+    &--color--red {
+      /* Appearance */
+      color: $red;
+    }
+
+    /**
+     * Icon size large.
+     *
+     * @modifier large
+     * @property size
+     * @for icon
+     */
+    &--size--large {
+      /* Appearance */
+      font-size: to-rem(60px);
+    }
+
+    /**
+     * Displays check to icon element.
+     *
+     * @modifier check
+     * @property icon
+     * @for icon
+     */
+    &--icon--check {
+      /* Appearance */
+      color: $green;
+
+      &:before {
+        content: $content-check;
+      }
+    }
+
+    /**
+     * Displays warning to icon element.
+     *
+     * @modifier warning
+     * @property icon
+     * @for icon
+     */
+    &--icon--warning {
+      &:before {
+        content: $content-alert-warning;
+      }
+    }
+
+  }
+
+  /**
+   * Styles success block
+   *
+   * @element success
+   */
+  &__success {
+    /* Display and box model */
+    padding: $default-space-sm;
+
+    /* Appearance */
+    text-align: center;
+    color: $green;
+    border-radius: $global-rounded;
+    background: rgba($green, .25);
+  }
+
+  /**
+   * Styles error block
+   *
+   * @element error
+   */
+  &__error {
+    /* Display and box model */
+    padding: $default-space-sm;
+
+    /* Appearance */
+    color: $red;
+    border-radius: $global-rounded;
+    background: rgba($red, .1);
+
+    .message__copy {
+      /* Appearance */
+      color: $red;
+    }
+
+    .message__list--border-top {
+      /* Appearance */
+      border-color: $red;
+    }
+  }
+
+  /**
+   * Styles copy in a message.
+   *
+   *
+   * @element copy
+   */
+  &__copy {
+
+    /* Appearance */
+    @include font-regular;
+    font-size: $font-xsm;
+    line-height: 1.4em;
+
+    /**
+     * Centers text.
+     *
+     * @modifier center
+     * @property text
+     * @for copy
+     */
+    &--text--center {
+      /* Appearance */
+      text-align: center;
+    }
+
+    /* Appearance */
+    @include font-regular;
+    font-size: $font-xsm;
+    line-height: 1.4em;
+
+    /**
+     * Makes the text larger.
+     *
+     * @modifier large
+     * @property text
+     * @for copy
+     */
+    &--text--large {
+      /* Appearance */
+      font-size: to-rem(19px);
+    }
+
+    /**
+     * Makes the text smaller.
+     *
+     * @modifier small
+     * @property text
+     * @for copy
+     */
+    &--text--small {
+      /* Appearance */
+      font-size: $font-xxsm;
+    }
+
+    /**
+     * Makes the text extra large.
+     *
+     * @modifier extra-large
+     * @property text
+     * @for copy
+     */
+    &--text--extra-large {
+      /* Appearance */
+      font-size: to-rem(23px);
+    }
+
+    /**
+     * Makes the text bold.
+     *
+     * @modifier bold
+     * @property text
+     * @for copy
+     */
+    &--text--bold {
+      /* Appearance */
+      @include font-semibold;
+    }
+  }
+
+  /**
+   * Styles copy in a message.
+   *
+   *
+   * @element number-list
+   */
+  &__number-list {
+    /* Display and box model */
+    margin-left: to-rem(22px);
+
+    /* Appearance */
+    list-style-type: decimal;
+  }
+
+  /**
+   * Styles items in a number list
+   *
+   *
+   * @element number-list-item
+   */
+  &__number-list-item {
+    /* Display and box model */
+    margin-bottom: $default-space-xsm;
+
+    /* Appearance */
+    font-size: to-rem(15px);
+    line-height: 1.4em;
+  }
+
+  /**
+   * Adds a spacing to divide and split up segements
+   * of information within a message.
+   * Ex. Used alongside the title element for "OR" in
+   * the Device Activation Guide.
+   *
+   *
+   * @element divider
+   */
+  &__divider {
+    margin: $default-space-med 0;
+  }
+}

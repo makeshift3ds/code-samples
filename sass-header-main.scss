@@ -1,0 +1,509 @@
+/**
+ * The application's main header. Contains the app's logo,
+ * the user's profile summary/avatar, and the main app's navigation.
+ *
+ * Wrap this block with the `app__header` block which will control
+ * its height when it's opened and closed.
+ *
+ * The header "opens" on small and medium screens to show the navigation and
+ * profile info, whereas it doesn't need to open on large screens.
+ *
+ * @block header-main
+ */
+.header-main {
+  /* Display and box model */
+  height: 100%;
+  /* show scrollbar when opened and
+  larger than parent height. This is only
+  applicable on small/medium screens. */
+  overflow: auto;
+
+  /* Appearance */
+  @include font-semibold;
+  box-shadow: 0 -.5em 0.75em rgba($white, 1);
+  background: rgba($drk-blue, .95);
+
+  /**
+   * The section that contains the logo and nav button.
+   * This section is always visible - when the header
+   * is open or closed.
+   *
+   * It also contains the main navigation on large screens.
+   *
+   * @element main
+   */
+  &__main {
+    /* Display and box model */
+    display: flex;
+    /* center children vertically */
+    align-items: center;
+    padding: 0 to-rem(13px);
+    height: to-rem(60px);
+  }
+
+  /**
+   * The part of the header that is below the `main`
+   * element. This part is only visible on mobile
+   * when the header is open.
+   *
+   * @element extended
+   */
+  &__extended {
+    /**
+     * The extended element is hidden when the
+     * header is closed.
+     *
+     * @modifier hidden
+     * @for extended
+     */
+    &--hidden {
+      display: none;
+    }
+  }
+
+  /**
+   * Left part of the `main` element. Contains the logo.
+   *
+   * @element left
+   */
+  &__left {
+    /* Display and box model */
+    height: 100%;
+    display: flex;
+    flex: 1;
+    /* left align children */
+    justify-content: flex-start;
+    /* center content vertically (in this case the logo) */
+    align-items: center;
+  }
+
+  /**
+   * The right part of the `main` element.
+   * - Contains the open/close button on small/medium screens
+   * - Contains the icon navigation menus on large screens
+   *
+   * @element right
+   */
+  &__right {
+    /* Display and box model */
+    height: 100%;
+    display: flex;
+    flex: 1;
+    /* right align children */
+    justify-content: flex-end;
+  }
+
+  /**
+   * The middle part of the `main` element.
+   * Contains the main navigation on large screens.
+   *
+   * @element middle
+   */
+  &__middle {
+    /* Display and box model */
+    /* no need to set the height to 100%
+    as along as we set the flex property.
+    If this is ever removed, remember
+    to set the height to 100%. */
+    flex: 2;
+    display: flex;
+    /* center children horizontally */
+    justify-content: center;
+  }
+
+  /**
+   * The application's logo.
+   *
+   * @element logo
+   */
+  &__logo {
+    /* Display and box model */
+    width: rem-calc(195px);
+    height: to-rem(30px);
+
+    /* Appearance */
+    background: $image-connect-logo-white 0 0 no-repeat;
+    background-size: 100%;
+
+    /* Accessibility */
+    text-indent: -9999px;
+  }
+
+  /**
+   * Wrap menu links with this element.
+   * Can be used for all menus links.
+   *
+   * @element item
+   */
+  &__item {
+    /**
+     * `item` element that wrap icons menus
+     * should have this modifier
+     *
+     * @modifier icon
+     */
+    &--icon {
+      /* Display and box model */
+      /* Center the icon vertically */
+      display: flex;
+      align-items: center;
+      height: 100%;
+
+      margin: 0 to-rem(15px);
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  /**
+   * The menu links. These are the outer links,
+   * not the sub-links.
+   *
+   * @element link
+   */
+  &__link {
+    /* Display and box model */
+    /* Needs to be relative so we can absolutely
+    position the "arrow" pseudo element */
+    position: relative;
+
+    /* Appearance */
+    text-decoration: none;
+    color: $white;
+    font-size: $font-sm;
+    @include font-semibold;
+    font-family: $sans-brand;
+
+    /**
+     * When the route we're pointing to
+     * is the current.
+     * Not to be confused with `highlighted`.
+     *
+     * @modifier active
+     * @for link
+     */
+    &--active {}
+
+    /**
+     * Applied to parent menus
+     * to indicate that they're open
+     * (showing the child links).
+     *
+     * @modifier highlighted
+     * @for link
+     */
+    &--highlighted{}
+
+    /**
+     * Parent menu. This means that when we click
+     * on this link a sub-nav will open.
+     *
+     * @modifier parent
+     * @for link
+     */
+    &--parent {
+      /* The arrow to indicate the link opens a sub-nav */
+      &:after {
+        @include font-icon;
+        /* Content */
+        content: $content-right-arrow;
+        /* Display and box model */
+        position: absolute;
+        /* center vertically */
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        height: to-rem(15px);
+      }
+    }
+  }
+
+  /**
+   * Some menus are two levels. When we click on the menu link,
+   * it opens a sub-nav. Examples are inventory, logs, tools...
+   *
+   * @element sub-nav
+   */
+  &__sub-nav {
+    /* Display and box model */
+    display: block;
+
+    /**
+     * The sub-nav is to the right of the screen.
+     * It just repositions the sub-nav so it doesn't
+     * leave the view port.
+     *
+     * Only used for desktop. Rules are under
+     * the large-up media query.
+     *
+     * @modifier right
+     * @for sub-nav
+     * @hide
+     */
+    &--right {}
+
+    /**
+     * When the menu is closed, the sub-nav
+     * is hidden.
+     *
+     * @modifier hidden
+     * @for sub-nav
+     */
+    &--hidden {
+      display: none;
+    }
+  }
+
+  /**
+   * A single link inside the `sub-nav`.
+   *
+   * @element sub-link
+   */
+  &__sub-link {
+    /* Appearance */
+    font-size: $font-sm;
+    @include font-semibold;
+    font-family: $sans-brand;
+    text-decoration: none;
+
+    /**
+     * Link is disabled.
+     *
+     * @modifier disabled
+     * @for sub-link
+     */
+    &--disabled {
+      /* Appearance */
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  /**
+   * A button container. Currently used
+   * on small/medium screens for the logout button.
+   *
+   * @element action
+   */
+  &__action {}
+
+  /**
+   * Large screen customizations. On large screens,
+   * the header doesn't open/close. Everything is accessible
+   * while the header is a bar fixed to the bottom of the page.
+   *
+   * Navigation is divided into two parts:
+   * - The middle which contains a mix of direct links or sub-nav openers.
+   * - The right which contains icons that open sub-navs. The last icon
+   * opens the users' profile summary.
+   */
+  @media #{$large-up} {
+    /* Display and box model */
+    /* On large screens, sub-navs
+    open above the header, which means
+    we need the header's overflow should be
+    visible - we also don't need to scroll
+    on large screens since the header doesn't open. */
+    overflow: visible;
+
+    /* Appearance */
+    background: $drk-blue;
+
+    /* On large screens we want the items
+    to fill the `main` element vertically */
+    &__item {
+      /* Display and box model */
+      height: 100%;
+    }
+
+    /**
+     * On large scresns, we need the middle
+     * main navigation to fill the `main` element
+     * vertically.
+     */
+    &__middle {
+      /* Display and box model */
+      height: 100%;
+    }
+
+    &__link {
+      /* Display and box model */
+      display: inline-block;
+      /* Center the link's text vertically + some left/right padding */
+      padding: to-rem(16px) to-rem(15px) 0 to-rem(15px);
+      /* Fill the parent on mobile */
+      height: 100%;
+
+      /* Appearance */
+      transition: color 0.2s linear;
+
+      &--active, &--highlighted {
+        /* Display and box model */
+        border-bottom: solid 5px $bequick-blue;
+      }
+
+      &:hover {
+        color: $orange;
+      }
+
+      /**
+       * Show right arrow when menu link has a sub menu.
+       */
+      &--parent {
+        /* Display and box model */
+        /* Leave room for the arrow to the right */
+        padding-right: to-rem(25px);
+
+        /* Downward facing arrow to the right */
+        &:after {
+          /* Display and box model */
+          right: to-rem(10px);
+
+          /* Appearance */
+          font-size: to-rem(7px);
+          /* Default is right facing */
+          transform: rotate(-90deg);
+        }
+
+        /* color the arrow orange when menu link is opened */
+        &.header-main__link--highlighted {
+          &:after {
+            color: $orange;
+          }
+        }
+      }
+    }
+
+    &__sub-nav {
+      /* Display and box model */
+      /* This will cause it to open
+      directly above the parent menu link */
+      position: absolute;
+      bottom: to-rem(60px);
+
+      /* Appearance */
+      background: rgba($off-white, 0.9);
+      box-shadow: 0 -1px 5px rgba($black, 0.25), 0 -1px 15px rgba($black, 0.25), 0 -1px 20px rgba($black, 0.1);
+      border-radius: 3px 3px 0 0;
+      border-top: solid 5px $orange;
+      /* just expand the menu's width instead
+      of wrapping on a new line for multi-word links */
+      white-space: nowrap;
+
+      &--right {
+        /* icons sub-navs are on the right
+        so we can't rely on default position
+        or it would be outside the view port  */
+        right: to-rem(20px);
+      }
+    }
+
+    &__sub-link {
+      /* Display and box model */
+      padding: to-rem(13px) to-rem(30px);
+      display: block;
+
+      /* Appearance */
+      color: $drk-blue;
+
+      &:hover {
+        background: #e1ebf8;
+      }
+
+      /* Remove hover effect on disabled links */
+      &--disabled {
+        &:hover {
+          background: transparent;
+        }
+      }
+    }
+
+    /**
+     * The application's logo.
+     *
+     * @element logo
+     */
+    &__logo {
+      /* Display and box model */
+      margin-left: to-rem(16px);
+    }
+  }
+
+  @media #{$small-only}, #{$medium-only} {
+    &__link {
+      /* Display and box model */
+      /* Separate links from each other */
+      margin: .5em 0;
+      /* Each link on a new line */
+      display: block;
+      padding-left: 1em;
+      height: to-rem(52px);
+      /* center text vertically */
+      line-height: to-rem(52px);
+
+      /* Appearance */
+      background: rgba($drk-blue, 0.95);
+      transition: background-color .2s linear;
+
+      /**
+       * Current route
+       */
+      &--active {
+        /* Appearance */
+        border-left: solid 5px $bequick-blue;
+      }
+
+      /**
+       * Corresponding sub-nav opened.
+       */
+      &--highlighted {
+        background-color: $bequick-blue;
+      }
+
+      /**
+       * Show right facing arrow to the right.
+       */
+      &--parent {
+        &:after {
+          right: to-rem(10px);
+        }
+
+        /* When sub-nav is open, arrow should point
+        downward */
+        &.header-main__link--highlighted {
+          &:after {
+            /* Appearance */
+            transform: rotate(90deg);
+          }
+        }
+      }
+    }
+
+    &__sub-link {
+      /* Display and box model */
+      /* Fill the parent width */
+      display: block;
+      /* Indent a bit to show parent/child hierarchy */
+      padding-left: to-rem(35px);
+      height: to-rem(52px);
+      /* center text vertically */
+      line-height: to-rem(52px);
+
+      /* Appearance */
+      color: $white;
+
+      &--disabled {
+        color: $lighter-slate;
+      }
+    }
+
+    &__action {
+      /* Display and box model */
+      width: 83%;
+      margin: to-rem(25px) auto;
+    }
+  }
+
+}

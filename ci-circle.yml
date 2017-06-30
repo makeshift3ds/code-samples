@@ -1,0 +1,64 @@
+machine:
+  node:
+    version: 4.0.0
+  ruby:
+    version: 2.4.1
+
+# save the api test log as an artifact for science
+general:
+  artifacts:
+    - "$HOME/connect_api/log/test.log"
+
+dependencies:
+  pre:
+    # circleci requires a gemfile
+    - touch $HOME/connect_portal/Gemfile
+
+    # setup the api for end to end testing
+    - bash $HOME/connect_portal/circleci/configure-connect-api.sh
+
+    # split the tests up into groups for parallelization
+    - bash $HOME/connect_portal/circleci/configure-parallelism.sh
+
+    # start the server in test mode as a background process so the
+    # script can continue running.
+    - $HOME/connect_api/bin/rails server webrick -e test:
+        background: true
+
+  # cache these directories so they will be available quicker
+  # on new test server instances. configure-connect-api checks
+  # that it is running the current revision.
+  cache_directories:
+    - "~/connect_portal/node_modules"
+    - "~/connect_portal/bower_components"
+    - "~/connect_api"
+
+test:
+  pre:
+    # setup space for junit reports to go
+    # used by ci to make your failures look good.
+    - mkdir -p $CIRCLE_TEST_REPORTS/qunit
+  post:
+    - mkdir $CIRCLE_ARTIFACTS/log
+    - mv $HOME/connect_api/log/* $CIRCLE_ARTIFACTS/log
+
+
+deployment:
+  staging:
+    branch: staging
+    commands:
+      # deploy to staging s3 bucket
+      - bash $HOME/connect_portal/circleci/circle-deploy.sh staging
+  production:
+    branch: master
+    commands:
+      # deploy to production s3 bucket
+      - bash $HOME/connect_portal/circleci/circle-deploy.sh production
+
+# supress branch test results from notifications
+experimental:
+  notify:
+    branches:
+      only:
+        - master
+        - staging
