@@ -1,0 +1,527 @@
+<html>
+<head>
+<title>Docs For Class Cart</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top"></td>
+  </tr>
+  <tr><td class="header_line"><img src="empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr><td class="header_line"><img src="empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+          <b>Files:</b><br />
+      	  <div class="package">
+			Cart.class.php
+	  </div><br />
+            <b>Classes:</b><br />
+        <div class="package">
+		    Cart<br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1>Class: Cart</h1>
+Source Location: /Cart.class.php<br /><br />
+
+
+<table width="100%" border="0">
+<tr><td valign="top">
+
+<h3><a href="#class_details">Class Overview</a></h3>
+<pre></pre><br />
+<div class="description">
+	<pre>
+	Purpose: Cart who's items can have any number of attributes
+	
+	Update 5/25/2011 - Added the ability to create multiple carts ie (cart/wishlist)
+	
+	$cart = new Cart;		// create a new cart object
+	$item = array('id'=&gt;132,'qty'=&gt;'1','color'=&gt;'blue','size'=&gt;'large');	// create a new item array - ID is required
+	$cart-&gt;addItem($item); 	// new item will be added (cart has 1 item)
+	$item['qty'] += 2;		// now the item qty equals 3;
+	$cart-&gt;addItem($item);	// since qty=3 it updates the qty rather than add 3 more items
+	$item['color']  = 'white';	// now the color is different
+	$cart-&gt;addItem($item); 	// since this does not match any other cart item a new item will be added;
+	$cart-&gt;removeItem(0);	// remove the first item from the cart
+	$cart-&gt;updateItem(0,array('color'=&gt;'yellow')); now the color of the item will be yellow
+	$cart-&gt;clearCart();		// empty the cart
+	$cart-&gt;dumpCart();		// dump the cart for test viewing
+	$cart_contents = $cart-&gt;getCart();		// get the cart for processing
+		foreach($cart_contents as $cart_item)
+		echo $cart_item['id']; // output all the cart id's
+	</pre>
+	</div><br /><br />
+</td>
+
+<td valign="top">
+<h3><a href="#class_methods">Methods</a></h3>
+<ul>
+    <li><a href="#method__construct">__construct</a></li>
+    <li><a href="#methodaddItem">addItem</a></li>
+    <li><a href="#methodclearCart">clearCart</a></li>
+    <li><a href="#methoddump">dump</a></li>
+    <li><a href="#methodgetCart">getCart</a></li>
+    <li><a href="#methodgetSerialized">getSerialized</a></li>
+    <li><a href="#methodisEmpty">isEmpty</a></li>
+    <li><a href="#methoditemCount">itemCount</a></li>
+    <li><a href="#methodremoveItem">removeItem</a></li>
+    <li><a href="#methodsetCart">setCart</a></li>
+    <li><a href="#methoduniqueItemCount">uniqueItemCount</a></li>
+    <li><a href="#methodupdateCart">updateCart</a></li>
+    <li><a href="#methodupdateItem">updateItem</a></li>
+  </ul>
+</td>
+
+</tr></table>
+
+<a name="class_methods"></a>
+<h3>Class Methods</h3>
+<div class="tags">
+
+  <hr />
+	<a name="method__construct"></a>
+	<h3>constructor __construct <span class="smalllinenumber">[line 36]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null __construct(
+[string
+$cart_name = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		__construct : initiate cart object<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$cart_name</b>&nbsp;&nbsp;</td>
+        <td>cart identifier (cart,wishlist,briefcase,etc)</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodaddItem"></a>
+	<h3>method addItem <span class="smalllinenumber">[line 90]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null addItem(
+string
+$attribs)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		addItem : add an item to the shopping cart. The only required information is 'id'. Qty, if empty is assumed to be 1.<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$attribs</b>&nbsp;&nbsp;</td>
+        <td>associative array with item information (data['id'=&gt;1,'qty'=&gt;3,'color'=&gt;'red'])</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodclearCart"></a>
+	<h3>method clearCart <span class="smalllinenumber">[line 77]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null clearCart(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		clearCart : empty the cart<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methoddump"></a>
+	<h3>method dump <span class="smalllinenumber">[line 171]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null dump(
+string
+$cart_name)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		dump : expel the cart for inspection<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$cart_name</b>&nbsp;&nbsp;</td>
+        <td>cart identifier (cart,wishlist,briefcase,etc)</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetCart"></a>
+	<h3>method getCart <span class="smalllinenumber">[line 160]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>array getCart(
+string
+$cart_name)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		getCart : return the cart array - alternatively you can call the variable directly $mycart = $Cart-&gt;cart;<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$cart_name</b>&nbsp;&nbsp;</td>
+        <td>cart identifier (cart,wishlist,briefcase,etc)</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetSerialized"></a>
+	<h3>method getSerialized <span class="smalllinenumber">[line 216]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null getSerialized(
+string
+$cart_name)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		getSerialized : return the cart as a serialized array - useful for saving the state of a shopping cart<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$cart_name</b>&nbsp;&nbsp;</td>
+        <td>cart identifier (cart,wishlist,briefcase,etc)</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodisEmpty"></a>
+	<h3>method isEmpty <span class="smalllinenumber">[line 183]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>boolean isEmpty(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		isEmpty : check to see if the cart is empty<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methoditemCount"></a>
+	<h3>method itemCount <span class="smalllinenumber">[line 193]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>integer itemCount(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		itemCount : return the number of items in the cart (the total of all qty's)<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodremoveItem"></a>
+	<h3>method removeItem <span class="smalllinenumber">[line 136]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null removeItem(
+string
+$index)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		removeItem : remove an item from the cart - it uses the index of the array as the identifier<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$index</b>&nbsp;&nbsp;</td>
+        <td>array index value for the target item</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetCart"></a>
+	<h3>method setCart <span class="smalllinenumber">[line 47]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null setCart(
+string
+$cart_name)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		setCart : set the current cart object<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$cart_name</b>&nbsp;&nbsp;</td>
+        <td>cart identifier (cart,wishlist,briefcase,etc)</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methoduniqueItemCount"></a>
+	<h3>method uniqueItemCount <span class="smalllinenumber">[line 205]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>integer uniqueItemCount(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		uniqueItemCount : the number of unique items in the cart (the number of array entries)<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodupdateCart"></a>
+	<h3>method updateCart <span class="smalllinenumber">[line 149]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null updateCart(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		updateCart : a system method that will commit cart changes. This can be used publicly if you decide to manipulate the cart externally<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodupdateItem"></a>
+	<h3>method updateItem <span class="smalllinenumber">[line 59]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null updateItem(
+
+$index, 
+$attribs, string
+$cart_name)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		updateItem : update an existing item - add item will do this by default, but it can be called here as well<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$cart_name</b>&nbsp;&nbsp;</td>
+        <td>cart identifier (cart,wishlist,briefcase,etc)</td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$index</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$attribs</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+</div><br />
+
+
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Thu, 26 May 2011 15:47:23 -0400 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.3</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

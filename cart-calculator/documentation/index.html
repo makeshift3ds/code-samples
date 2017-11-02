@@ -1,0 +1,537 @@
+<html>
+<head>
+<title>Docs For Class Cart_Calculator</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top"></td>
+  </tr>
+  <tr><td class="header_line"><img src="empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr><td class="header_line"><img src="empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+          <b>Files:</b><br />
+      	  <div class="package">
+			Cart_Calculator.class.php
+	  </div><br />
+            <b>Classes:</b><br />
+        <div class="package">
+		    Cart_Calculator<br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1>Class: Cart_Calculator</h1>
+Source Location: /Cart_Calculator.class.php<br /><br />
+
+
+<table width="100%" border="0">
+<tr><td valign="top">
+
+<h3><a href="#class_details">Class Overview</a></h3>
+<pre></pre><br />
+<div class="description">
+	<pre>
+	Purpose: Calculate a shopping cart with discounts, taxes, shipping and handling fees.
+	
+	// create a Cart_Calculator object
+	$Cart_Calculator = new Cart_Calculator(array(
+			'shipping' => 10.53,
+			'tax' => 6.5,
+			'discount' => '5%', 
+			'handling' => 12.50,
+			'prefix' => '$'
+	));
+						
+	
+	$cart[0]['title'] = 'Product 1'; 	
+	$cart[0]['price'] = 12.99;
+	$cart[0]['qty'] = 3;
+	$cart[1]['title'] = 'Product 2';
+	$cart[1]['price'] = 25.50;
+	$cart[1]['qty'] = 9;
+	$cart[1]['discount'] =5.50;
+	$cart[1]['tax'] = 3.5;
+	$cart[1]['handling'] = 2.50;
+	
+	list($cart,$totals) = $Cart_Calculator->getTotals($cart);
+	
+	// updated cart with subtotal, tax, handling, total and discount amounts added
+	print_r($cart); 
+	
+	// cart totals includes subtotal, tax, shipping, handling, discount total, grand total, taxable amount and the discountable amount
+	print_r($totals); // cart totals
+
+	</pre>
+	</div><br /><br />
+</td>
+
+<td valign="top">
+	<h3><a href="#class_methods">Methods</a></h3>
+	<ul class="small">
+		<li><a href="#method__construct">__construct</a></li>
+		<li><a href="#methodgetDiscount">getDiscount</a></li>
+		<li><a href="#methodgetHandling">getHandling</a></li>
+		<li><a href="#methodgetPrefix">getPrefix</a></li>
+		<li><a href="#methodgetShipping">getShipping</a></li>
+		<li><a href="#methodgetTax">getTax</a></li>
+		<li><a href="#methodgetTotals">getTotals</a></li>
+		<li><a href="#methodmoneyFormat">moneyFormat</a></li>
+		<li><a href="#methodsetDiscount">setDiscount</a></li>
+		<li><a href="#methodsetHandling">setHandling</a></li>
+		<li><a href="#methodsetPrefix">setPrefix</a></li>
+		<li><a href="#methodsetShipping">setShipping</a></li>
+		<li><a href="#methodsetTax">setTax</a></li>
+	</ul>
+</td>
+</tr></table>
+<a name="class_methods"></a>
+<h3>Class Methods</h3>
+<div class="tags">
+
+  <hr />
+	<a name="method__construct"></a>
+	<h3>constructor __construct <span class="smalllinenumber">[line 34]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null __construct(
+[array
+$params = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		__construct : initiate Cart_Calculator component<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$params</b>&nbsp;&nbsp;</td>
+        <td>set configuration variables - tax, shipping, discount, handling and currency prefix</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetDiscount"></a>
+	<h3>method getDiscount <span class="smalllinenumber">[line 104]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>integer getDiscount(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		getDiscount : get the amount to be discounted from the total.<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetHandling"></a>
+	<h3>method getHandling <span class="smalllinenumber">[line 159]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>integer getHandling(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		getHandling : get the amount for handling.<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetPrefix"></a>
+	<h3>method getPrefix <span class="smalllinenumber">[line 138]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string getPrefix(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		getPrefix : get the currency identifier<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetShipping"></a>
+	<h3>method getShipping <span class="smalllinenumber">[line 83]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>integer getShipping(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		getShipping : get the shipping cost<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodgetTax"></a>
+	<h3>method getTax <span class="smalllinenumber">[line 62]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>integer getTax(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		getTax : get the tax rate<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+		
+	        <div class="top">[ <a href="#top">Top</a> ]</div>
+	  </div>
+	  <hr />
+		<a name="methodgetTotals"></a>
+		<h3>method getTotals <span class="smalllinenumber">[line 171]</span></h3>
+		<div class="function">
+	    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+	    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+			<code>array getTotals(
+	array
+	$cart)</code>
+	    </td></tr></table>
+	    </td></tr></table><br />
+		
+			getTotals : calculate the totals in an array. Array must be formatted with a price and qty. Optional variables for cart items are handling, discount and tax. All other variables are passed through unchanged.<br /><br /><br /><br />
+	<h4>Tags:</h4>
+	<div class="tags">
+	<table border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td><b>return:</b>&nbsp;&nbsp;</td><td>array('cart'=>array('price','qty','discounted','discount','subtotal','tax','taxed','handling_charge','handling','total'),'totals'=>array('subtotal','shipping','discount','discounted','discountable','handling','taxable','tax',))</td>
+	  </tr>
+	  <tr>
+	    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+	  </tr>
+	</table>
+	</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">array&nbsp;&nbsp;</td>
+        <td><b>$cart</b>&nbsp;&nbsp;</td>
+        <td>list of items 'price' and 'qty' are required</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodmoneyFormat"></a>
+	<h3>method moneyFormat <span class="smalllinenumber">[line 116]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null moneyFormat(
+integer
+$number, [string
+$prefix = null])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		moneyFormat : round floating point numbers to a money and comparison friendly format 1.2575 will be rounded to 1.26 and 1.2525 will be rounded to 1.25.<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">integer&nbsp;&nbsp;</td>
+        <td><b>$number</b>&nbsp;&nbsp;</td>
+        <td>number to format</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$prefix</b>&nbsp;&nbsp;</td>
+        <td>prefix to use such as $</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetDiscount"></a>
+	<h3>method setDiscount <span class="smalllinenumber">[line 94]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null setDiscount(
+mixed
+$discount)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		setDiscount : set the amount to be discounted from the total. Items that have already been discounted will not be discounted again.<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">mixed&nbsp;&nbsp;</td>
+        <td><b>$discount</b>&nbsp;&nbsp;</td>
+        <td>amount of discount to give can be a percent or integer such as 25% or 2.50</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetHandling"></a>
+	<h3>method setHandling <span class="smalllinenumber">[line 149]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null setHandling(
+integer
+$handling)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		setHandling : set the amount of handling to be added to the cart.<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">integer&nbsp;&nbsp;</td>
+        <td><b>$handling</b>&nbsp;&nbsp;</td>
+        <td>amount of handling such as 12.50 or 2.95</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetPrefix"></a>
+	<h3>method setPrefix <span class="smalllinenumber">[line 128]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null setPrefix(
+[string
+$prefix = '$'])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		setPrefix : set the prefix to use with currency such as $<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$prefix</b>&nbsp;&nbsp;</td>
+        <td>currency prefix</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetShipping"></a>
+	<h3>method setShipping <span class="smalllinenumber">[line 73]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null setShipping(
+integer
+$shipping)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		setShipping : set the shipping cost - this will be added to the subtotal<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">integer&nbsp;&nbsp;</td>
+        <td><b>$shipping</b>&nbsp;&nbsp;</td>
+        <td>cost of shipping - should be an integer without any currency symbol such as 12.21 or 5</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodsetTax"></a>
+	<h3>method setTax <span class="smalllinenumber">[line 51]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>null setTax(
+integer
+$tax)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		setTax : set the tax rate. this rate will be applied to the cart items which are not individually taxed<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">integer&nbsp;&nbsp;</td>
+        <td><b>$tax</b>&nbsp;&nbsp;</td>
+        <td>tax rate such as 6.5 or 4</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+</div><br />
+
+
+
+
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Thu, 9 Jun 2011 12:47:23 -0400 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.3</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
