@@ -8,7 +8,6 @@ session_start();
 // create a cart object
 $Cart = new Cart('cart');
 
-
 // here I use a trick that I learned about having two submit buttons in a form
 // it is possible and the one clicked will submit it's value
 // I am checking to see if it was the wishlist that was clicked
