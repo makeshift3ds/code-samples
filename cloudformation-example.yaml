@@ -1,0 +1,465 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Create independent environment within idplans.com
+Parameters:
+  awsAccessKeyId:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Description: SSM parameter key for aws access key id
+    Default: /rpm/aws_access_key_id
+  awsSecretAccessKey:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Description: SSM parameter key for aws secret access key
+    Default: /rpm/aws_secret_access_key
+  subdomain:
+    Type: String
+    Description: the value to prefix and tag resources with (dasherized)
+    Default: v5api-feature1
+  plug:
+    Type: String
+    Description: the value to prefix export names with (camelCased)
+    Default: v5ApiFeature1
+  priority:
+    Type: Number
+    Description: the priority for the listeners, starts at 3
+    Default: 3
+  domainName:
+    Type: String
+    Description: the domain name for the stack
+    Default: idplans.com
+  sslCert:
+    Type: String
+    Description: the ssl certificate to use
+    Default: [REDACTED]
+    NoEcho: true
+  gitHubUser:
+    Type: String
+    Description: gitHub User
+    Default: "idplans"
+  gitHubRepo:
+    Type: String
+    Description: gitHub Repo to pull from. Only the Name. not the URL
+    Default: "v5api"
+  gitHubBranch:
+    Type: String
+    Description: gitHub Branch
+    Default: "feature1"
+  gitHubToken:
+    Type: String
+    Description: github OAuth Token
+    Default: [REDACTED]
+    NoEcho: true
+  healthCheck:
+    Type: String
+    Description: endpoint for health-check
+    Default: /v1/health-check
+  nodeEnv:
+    Type: String
+    Description: environment to use for node
+    Default: staging
+  buildComputeType:
+    Type: String
+    Default: "BUILD_GENERAL1_SMALL"
+    Description: The build compute type to use for building the app
+
+Resources:
+  repository:
+    Type: AWS::ECR::Repository
+    # DeletionPolicy: Retain # with this on, repository has to be manually removed (if custom name is used)
+    Properties: 
+      RepositoryName: !Ref subdomain
+
+  # create a url for the stack
+  recordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub ${domainName}.
+      Comment: Alias record for v5api application load balancer.
+      Name: !Sub ${subdomain}.${domainName}.
+      Type: A
+      AliasTarget:
+        HostedZoneId: !ImportValue applicationLoadBalancerCanonicalHostedZoneID
+        DNSName: !ImportValue applicationLoadBalancerDNSName
+
+  # create a service to manage the v5api containers in the cluster
+  service: 
+    Type: AWS::ECS::Service
+    DependsOn:
+      - listenerRuleHttp
+      - listenerRuleHttps
+    Properties: 
+      Cluster: !ImportValue cluster
+      LaunchType: FARGATE
+      # DesiredCount has to be updated after the stack is created
+      # this had to be set to 2 on v5api to handle both subnets
+      DesiredCount: 2
+      DeploymentConfiguration:
+        MinimumHealthyPercent: 50
+        MaximumPercent: 200
+      TaskDefinition: !Ref taskDefinition
+      LoadBalancers: 
+        - ContainerName: !Sub ${subdomain}-task-definition
+          ContainerPort: 80
+          TargetGroupArn: !Ref targetGroup
+      NetworkConfiguration: 
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !ImportValue securityGroup
+            - !ImportValue DatabaseSecurityGroup
+          Subnets:
+            - !ImportValue subnet1
+            - !ImportValue subnet2
+
+  # define the target group that the listeners on the
+  # load balancer are connected to
+  targetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub ${subdomain}-target-group
+      HealthCheckIntervalSeconds: 60
+      HealthCheckTimeoutSeconds: 30
+      UnhealthyThresholdCount: 10
+      HealthCheckPath: !Ref healthCheck
+      Port: 80
+      Protocol: HTTP
+      VpcId: !ImportValue vpc
+      TargetType: ip
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 30
+      Tags:
+        - Key: 'Name'
+          Value: !Ref subdomain
+
+  # create the task definition for running the example app            
+  taskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: 1024
+      RequiresCompatibilities: 
+        - FARGATE
+      Family: !Ref subdomain
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/ecsTaskExecutionRole
+      TaskRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/ecsTaskExecutionRole
+      Memory: 2048
+      ContainerDefinitions:
+        - Name: !Sub ${subdomain}-task-definition
+          Essential: true
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${subdomain}:latest
+          PortMappings:
+            - ContainerPort: '80'
+              HostPort: '80'
+          Command:
+            - npm
+            - run
+            - !Sub start:${nodeEnv}
+          WorkingDirectory: '/app'
+          Environment:
+          - Name: NODE_ENV
+            Value: !Ref nodeEnv
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref subdomain
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: !Ref subdomain
+
+  # add a rule to catch requests to subdomains matching
+  # the tag
+  listenerRuleHttp:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref targetGroup
+      Conditions:
+      - Field: host-header
+        Values:
+        - !Sub ${subdomain}.${domainName}
+      ListenerArn: !ImportValue listenerHttp
+      Priority: !Ref priority
+
+  # add a rule to catch requests to subdomains matching
+  # the tag
+  listenerRuleHttps:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref targetGroup
+      Conditions:
+      - Field: host-header
+        Values:
+        - !Sub ${subdomain}.${domainName}
+      ListenerArn: !ImportValue listenerHttps
+      Priority: !Ref priority
+
+  # create custom log group
+  # with the intention of pumping everything into it with tags
+  logGroup:
+    Type: 'AWS::Logs::LogGroup'
+    Properties:
+      LogGroupName: !Ref subdomain
+      RetentionInDays: 7
+
+  # most services need a place to store data
+  resourceBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain # with this on, bucket has to be manually removed
+    Properties:
+      BucketName: !Sub ${subdomain}-resources
+      VersioningConfiguration:
+        Status: Enabled
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders: ['*']
+          AllowedMethods: [GET]
+          AllowedOrigins: ['*']
+          ExposedHeaders: [Date]
+          Id: myCORSRuleId1
+          MaxAge: '3600'
+        - AllowedHeaders: [x-amz-*]
+          AllowedMethods: [DELETE]
+          AllowedOrigins: ['http://localhost:4200', 'http://rpm-staging.idplans.com']
+          ExposedHeaders: [Connection, Server, Date]
+          Id: myCORSRuleId2
+          MaxAge: '1800'
+  codeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - ecr:GetAuthorizationToken
+              - Resource: !Sub arn:aws:s3:::${pipelineBucket}/*
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:GetObjectVersion
+              - Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/${subdomain}
+                Effect: Allow
+                Action:
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:PutImage
+                  - ecr:InitiateLayerUpload
+                  - ecr:UploadLayerPart
+                  - ecr:CompleteLayerUpload
+
+  codePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource:
+                  - !Sub arn:aws:s3:::${pipelineBucket}/*
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - ecs:DescribeServices
+                  - ecs:DescribeTaskDefinition
+                  - ecs:DescribeTasks
+                  - ecs:ListTasks
+                  - ecs:RegisterTaskDefinition
+                  - ecs:UpdateService
+                  - codebuild:StartBuild
+                  - codebuild:BatchGetBuilds
+                  - iam:PassRole
+
+  pipelineBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain # with this on, bucket has to be manually removed
+
+  codePipeline: 
+    Type: "AWS::CodePipeline::Pipeline"
+    DependsOn:
+      - codeBuildProject
+    Properties: 
+      RoleArn: !GetAtt codePipelineRole.Arn
+      ArtifactStore: 
+        Type: S3
+        Location: !Ref pipelineBucket
+      # DisableInboundStageTransitions: 
+      #   - StageName: Release
+      #     Reason: "Disabling the transition until integration tests are completed"
+      Stages: 
+        - Name: Source
+          Actions: 
+            - 
+              Name: Source
+              ActionTypeId:
+                Category: "Source"
+                Owner: "ThirdParty"
+                Version: 1
+                Provider: "GitHub"
+              OutputArtifacts: 
+                - Name: GithubOutput
+              Configuration: 
+                Owner: !Ref gitHubUser
+                Repo: !Ref gitHubRepo
+                Branch: !Ref gitHubBranch
+                OAuthToken: !Ref gitHubToken
+              RunOrder: 1
+        - Name: Build
+          Actions: 
+            - 
+              Name: Build
+              InputArtifacts: 
+                - Name: GithubOutput
+              OutputArtifacts:
+                - Name: BuildOutput
+              ActionTypeId: 
+                Category: "Build"
+                Owner: "AWS"
+                Version: 1
+                Provider: "CodeBuild"
+              Configuration: 
+                ProjectName: !Sub ${subdomain}-code-build
+              RunOrder: 2
+        - Name: Deploy
+          Actions: 
+            - 
+              Name: Deploy
+              InputArtifacts: 
+                - Name: BuildOutput
+              ActionTypeId: 
+                Category: "Deploy"
+                Owner: "AWS"
+                Version: 1
+                Provider: "ECS"
+              Configuration:
+                ClusterName: !ImportValue cluster
+                FileName: codepipeline.conf.json
+                ServiceName: !GetAtt service.Name
+              RunOrder: 3
+      
+  codeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub ${subdomain}-code-build
+      ServiceRole: !Ref codeBuildRole
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/docker:17.09.0
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:
+          - Name: AWS_ACCESS_KEY_ID
+            Value: !Ref awsAccessKeyId
+          - Name: AWS_SECRET_ACCESS_KEY
+            Value: !Ref awsSecretAccessKey
+          - Name: AWS_DEFAULT_REGION
+            Value: !Ref AWS::Region
+          - Name: REPOSITORY_URI
+            Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${subdomain}
+          - Name: SUBDOMAIN
+            Value: !Ref subdomain
+          - Name: GITHUB_OAUTH
+            Value: !Ref gitHubToken
+          - Name: S3_BUCKET_NAME
+            Value: !Ref resourceBucket
+          - Name: NODE_ENV
+            Value: !Ref nodeEnv
+      Artifacts:
+        Type: CODEPIPELINE
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          version: 0.2
+          phases:
+            pre_build:
+              commands:
+                - echo Logging in to Amazon ECR...
+                - aws --version
+                - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+                - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+            build:
+              commands:
+                - echo Build started on `date`
+                - echo Building the Docker image...
+                - echo Using $REPOSITORY_URI:latest
+                - docker build -t $REPOSITORY_URI:latest -f docker/$NODE_ENV.Dockerfile --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --build-arg S3_BUCKET_NAME=$S3_BUCKET_NAME --build-arg GITHUB_OAUTH=$GITHUB_OAUTH .
+                - echo Tagged $REPOSITORY_URI:$IMAGE_TAG
+                - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+            post_build:
+              commands:
+                - echo Build completed on `date`
+                - echo Pushing the Docker images...
+                - docker push $REPOSITORY_URI:latest
+                - docker push $REPOSITORY_URI:$IMAGE_TAG
+                - echo Writing image definitions file...
+                - printf '[{"name":"%s-task-definition","imageUri":"%s"}]' $SUBDOMAIN $REPOSITORY_URI:$IMAGE_TAG > codepipeline.conf.json
+          artifacts:
+              files: codepipeline.conf.json
+
+Outputs:
+  plug:
+    Value: !Ref plug
+    Export:
+      Name: !Sub ${plug}Plug
+  logGroup:
+    Value: !Ref logGroup
+    Export:
+      Name: !Sub ${plug}LogGroup
+  taskDefinition:
+    Value: !Ref taskDefinition
+    Export:
+      Name: !Sub ${plug}TaskDefinition
+  service:
+    Value: !Ref service
+    Export:
+      Name: !Sub ${plug}Service
+  targetGroup:
+    Value: !Ref targetGroup
+    Export:
+      Name: !Sub ${plug}TargetGroup
+  taskDefinition:
+    Value: !Ref taskDefinition
+    Export:
+      Name: !Sub ${plug}TaskDefinition
+  repository:
+    Value: !Ref repository
+    Export:
+      Name: !Sub ${plug}Repository
+  resourceBucket:
+    Value: !Ref resourceBucket
+    Export:
+      Name: !Sub ${plug}ResourceBucket
+  pipelineUrl:
+    Value: !Sub https://console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${codePipeline}
