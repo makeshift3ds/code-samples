@@ -2,7 +2,7 @@
 /** NOTE June 2017
  * This was written 5 years ago with the Smarty Templating engine in mind.
  **/
-
+ 
 /**
  * Core API
  *

@@ -1,4 +1,4 @@
-/** Note June, 2017
+/** Note June, 2017 
  *
  * This is a script for an ESP8266 device that controls RF devices via MQTT requests.
  * This particular device controls appliances in my office. 

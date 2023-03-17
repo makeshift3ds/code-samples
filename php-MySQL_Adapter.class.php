@@ -5,7 +5,7 @@
  * This is a database wrapper that was intended for market, but eloquent came out around the same time
  * and I used that orm instead. Thanks for looking though :)
  **/
-
+ 
 /**
  * MySQL Wrapper
  *

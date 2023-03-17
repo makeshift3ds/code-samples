@@ -54,7 +54,7 @@ exports.handler = async (event, context, callback) => {
     if (!getNestedValue(record, 'dynamodb.NewImage.idpAttributes.S')) {
       return exports.log('does not have idpAttributes');
     }
-
+ 
     // encode the idpAttributes so we can access the optional object
     let idpAttributes = {};
     try {

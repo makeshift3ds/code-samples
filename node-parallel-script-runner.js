@@ -111,7 +111,7 @@ const {
       logger.warn(`${scriptPath} error: \n\t${data}`);
       if(program.logs) fs.appendFileSync(`${path.basename(scriptPath).replace('.js', '').replace(' ', '-')}.log`, `${data}\n`.replace('\n\n', '\n'));
     });
-  
+   
     child.on('exit', (code, signal) => {
       if (!code) {
         // continue execution

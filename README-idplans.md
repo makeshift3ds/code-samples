@@ -92,7 +92,7 @@ truncate Acls;
 truncate Roles;
 truncate RoleActions;
 SET FOREIGN_KEY_CHECKS=1;
-```
+``` 
 
 Now the Roles and Role Actions need to be reseeded. Run these sequelize commands to run the seeders.
 `sequelize db:seed --seed 20181113025420-roles.js`

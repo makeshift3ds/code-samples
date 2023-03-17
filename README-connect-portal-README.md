@@ -2,7 +2,7 @@
 [![Code Climate](https://codeclimate.com/repos/56fdc0c3bb4dca00600097de/badges/b1a2b60ce67cb0d4a67d/gpa.svg)](https://codeclimate.com/repos/56fdc0c3bb4dca00600097de/feed)
 [![Issue Count](https://codeclimate.com/repos/56fdc0c3bb4dca00600097de/badges/b1a2b60ce67cb0d4a67d/issue_count.svg)](https://codeclimate.com/repos/56fdc0c3bb4dca00600097de/feed)
 
-## Prerequisites
+## Prerequisites 
 
 You will need the following things properly installed on your computer.
 

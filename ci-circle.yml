@@ -1,4 +1,4 @@
-machine:
+machine: 
   node:
     version: 4.0.0
   ruby:

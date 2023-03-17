@@ -2,7 +2,7 @@
 #
 # My contributions to the Ruby codebase were only when I needed to. 
 # We have very talented Ruby developers that are very supportive of the
-# front-end developers. 
+# front-end developers.  
 
 class AddPlanTypeToPlan < ActiveRecord::Migration
   class Plan < ActiveRecord::Base

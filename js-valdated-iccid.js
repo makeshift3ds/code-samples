@@ -2,7 +2,7 @@ import Ember from 'ember';
 import ValidateFocusOut from 'employee-portal-cli/components/validate-focus-out';
 const {inject: {service}, run: {debounce, cancel, once}, observer} = Ember;
 
-/**
+/** 
  * Validated iccid is component that validates the length of the iccid
  * and checks it for luhn compatability.
  *

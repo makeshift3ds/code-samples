@@ -6,7 +6,7 @@
  * the house that control the sensors through out the house using MQTT via
  * a Mosquitto server. Also uses websockets to keep all the devices up to date.
  **/
-
+ 
 // subscribe to all topics defined in the devices table
 // conduit between topic messages and row values
 // conduit for front-end application to send mqtt

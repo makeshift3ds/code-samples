@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Ember from 'ember'; 
 import {initialize as stringInit} from '../../../initializers/string';
 import timestamp from '../../helpers/util/timestamp';
 import resolver from '../../helpers/resolver';

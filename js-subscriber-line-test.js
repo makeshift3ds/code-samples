@@ -2,7 +2,7 @@ import asyncModule from 'employee-portal-cli/tests/helpers/util/async-module';
 import {assertUniqueElement, assertFormErrors} from 'employee-portal-cli/tests/helpers/util/asserts';
 import {formatMdn} from 'employee-portal-cli/helpers/format-mdn';
 import {test} from 'qunit';
-
+ 
 asyncModule('Acceptance: Subscriber - Line - New', {
   setup() {
     createTestObjects('integration', 'with_suretax', {})
